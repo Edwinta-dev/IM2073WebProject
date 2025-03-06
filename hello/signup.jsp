@@ -52,7 +52,11 @@ pageEncoding="UTF-8"%>
       </div>
       <div class="mb-3">
         <label for="address" class="form-label">Address</label>
-        <input name="address" class="form-control" id="address" />
+        <input type="text" name="address" class="form-control" id="address" />
+      </div>
+      <div class="mb-3">
+        <label for="birthdate" class="form-label">Birth date</label>
+        <input name="birthdate" class="form-control" id="address" />
       </div>
       <button type="submit" class="btn btn-primary">Register!</button>
     </form>

@@ -9,7 +9,6 @@ import jakarta.servlet.annotation.*;
 import jakarta.servlet.http.*;
 
 @WebServlet("/bookservlet")
-
 public class BookServlet extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
