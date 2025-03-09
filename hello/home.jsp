@@ -13,6 +13,7 @@ pageEncoding="UTF-8"%> <%@ page import="java.util.*" %>
     />
   </head>
   <body> 
+    <!--Setting Up Nav bar on top of the screen-->
     <% Integer userId =(Integer) session.getAttribute("userId");
     if(userId==null){ response.sendRedirect("login.jsp"); } String firstName =
     (String) session.getAttribute("firstName"); %>  
@@ -71,6 +72,6 @@ pageEncoding="UTF-8"%> <%@ page import="java.util.*" %>
       >Harry Potter and the philospher's stone
     </a>
     <a class="btn btn-warning" href="bookservlet?book_id=4"> Dracula </a><br />
-
+    </div>
   </body>
 </html>
