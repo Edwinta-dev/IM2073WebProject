@@ -4,10 +4,8 @@ import jakarta.servlet.*; // Tomcat 10
 import jakarta.servlet.http.*;
 import jakarta.servlet.annotation.*;
 
-@WebServlet("/userservlet") // Configure the request URL for this servlet (Tomcat 7/Servlet 3.0 upwards)
+@WebServlet("/userservlet")
 public class UserServlet extends HttpServlet {
-
-    // The doGet() runs once per HTTP GET request to this servlet.
     @Override
     public void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
@@ -51,7 +49,7 @@ public class UserServlet extends HttpServlet {
             stmt.executeUpdate();
             HttpSession session = request.getSession();
             session.setAttribute("email", email);
-            response.sendRedirect("home.jsp");
+            response.sendRedirect("index.jsp");
         } catch (Exception e) {
             e.printStackTrace();
             response.sendRedirect("loginerror.jsp");
@@ -76,7 +74,7 @@ public class UserServlet extends HttpServlet {
                 HttpSession session = request.getSession();
                 session.setAttribute("userId", userId);
                 session.setAttribute("firstName", firstName);
-                response.sendRedirect("home.jsp");
+                response.sendRedirect("index.jsp");
             } else {
                 response.sendRedirect("loginerror.jsp");
             }

@@ -3,6 +3,7 @@ import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
+import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -17,6 +18,7 @@ public class CartServlet extends HttpServlet {
             throws ServletException, IOException {
         HttpSession session = request.getSession();
         Integer userId = (Integer) session.getAttribute("userId");
+        String action = (String) request.getAttribute("action");
         ArrayList<List<Object>> cartItems = new ArrayList<List<Object>>();
         if (userId != null) {
             // Establishing connection to server
@@ -39,8 +41,16 @@ public class CartServlet extends HttpServlet {
                 e.printStackTrace();
             }
             request.setAttribute("cartItems", cartItems);
-            RequestDispatcher dispatcher = request.getRequestDispatcher("cart.jsp");
-            dispatcher.forward(request, response);
+            String checkoutaction = request.getParameter("action");
+            if ("checkout".equals(checkoutaction)) {
+                RequestDispatcher dispatcher = request.getRequestDispatcher("checkout.jsp");
+                dispatcher.forward(request, response);
+
+            } else {
+                RequestDispatcher dispatcher = request.getRequestDispatcher("cart.jsp");
+                dispatcher.forward(request, response);
+
+            }
         }
     }
 
@@ -96,24 +106,25 @@ public class CartServlet extends HttpServlet {
                     updateCartstmt.executeUpdate();
                     message = "Quantity updated to " + quantity;
                     System.out.println(message);
-                    // Redirect back to books page (or wherever the user was)
-                    String redirect = "cart?userId==<%= userId%>";
-                    response.sendRedirect(redirect);
+                    response.sendRedirect("cart?userId=" + userId); // Default page in case referer is null
                 } else {
 
                     // Logic handling for Creating Entry in Cart
                     String addCart = "Insert into cart(user_id,book_id,quantity) values (?,?,1)";
+                    String removeWishlist = "Delete from wishlist where user_id=? and book_id=?";
                     PreparedStatement addCartstmt = conn.prepareStatement(addCart);
+                    PreparedStatement removeWishliststmt = conn.prepareStatement(removeWishlist);
                     addCartstmt.setInt(1, userId);
                     addCartstmt.setInt(2, bookId);
+                    removeWishliststmt.setInt(1, userId);
+                    removeWishliststmt.setInt(2, bookId);
                     addCartstmt.executeUpdate();
+                    removeWishliststmt.executeUpdate();
                     message = "Book sucessfully added to cart!";
                     System.out.println(message);
-                    // Store message in session (so it persists after redirect)
-                    session.setAttribute("cartMessage", message);
-                    // Redirect back to books page (or wherever the user was)
-                    String redirect = "cart?userId==<%= userId%>";
-                    response.sendRedirect(redirect);
+                    message = "Book sucessfully removed from wishlist";
+                    System.out.println(message);
+                    response.sendRedirect("cart?userId=" + userId); // Default page in case referer is null
                 }
             } catch (Exception e) {
                 e.printStackTrace();
@@ -163,7 +174,7 @@ public class CartServlet extends HttpServlet {
                         message = "Quantity updated to " + quantity;
                         System.out.println(message);
                         // Redirect back to books page (or wherever the user was)
-                        String redirect = "cart?userId==<%= userId%>";
+                        String redirect = "cart?userId=" + userId;
                         response.sendRedirect(redirect);
                     } else if (quantity == 1) {
                         // Logic handling for Deleting Entry in Cart
@@ -177,7 +188,7 @@ public class CartServlet extends HttpServlet {
                         // Store message in session (so it persists after redirect)
                         session.setAttribute("cartMessage", message);
                         // Redirect back to books page (or wherever the user was)
-                        String redirect = "cart?userId==<%= userId%>";
+                        String redirect = "cart?userId=" + userId;
                         response.sendRedirect(redirect);
 
                     } else {

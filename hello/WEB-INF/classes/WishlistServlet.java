@@ -9,7 +9,6 @@ import java.util.List;
 import jakarta.servlet.*; // Tomcat 10
 import jakarta.servlet.annotation.*;
 import jakarta.servlet.http.*;
-import java.util.logging.Logger;
 
 @WebServlet("/wishlist")
 public class WishlistServlet extends HttpServlet {
@@ -19,6 +18,7 @@ public class WishlistServlet extends HttpServlet {
         HttpSession session = request.getSession();
         Integer userId = (Integer) session.getAttribute("userId");
         ArrayList<List<Object>> wishlistItems = new ArrayList<List<Object>>();
+
         if (userId != null) {
             // Establishing connection to server
             try (Connection conn = DriverManager.getConnection("jdbc:mysql://localhost:3306/im2073webproj", "myuser",
@@ -80,10 +80,7 @@ public class WishlistServlet extends HttpServlet {
                     // Logic handling for book entry in wishlist alrdy exists
                     message = "Already in cart !";
                     System.out.println(message);
-                    // Store message in session (so it persists after redirect)
-                    session.setAttribute("wishlistMessage", message);
-                    // Redirect back to books page (or wherever the user was)
-                    String redirect = "wishlist?userId==<%= userId%>";
+                    String redirect = "wishlist?userId=" + userId;
                     response.sendRedirect(redirect);
                 } else {
 
@@ -93,12 +90,7 @@ public class WishlistServlet extends HttpServlet {
                     stmt.setInt(1, userId);
                     stmt.setInt(2, bookId);
                     stmt.executeUpdate();
-                    message = "Book sucessfully added to cart!";
-                    System.out.println(message);
-                    // Store message in session (so it persists after redirect)
-                    session.setAttribute("wishlistMessage", message);
-                    // Redirect back to books page (or wherever the user was)
-                    String redirect = "wishlist?userId==<%= userId%>";
+                    String redirect = "wishlist?userId=" + userId;
                     response.sendRedirect(redirect);
                 }
             } catch (Exception e) {
@@ -123,11 +115,8 @@ public class WishlistServlet extends HttpServlet {
                 removewishliststmt.setInt(1, userId);
                 removewishliststmt.setInt(2, bookId);
                 removewishliststmt.executeUpdate();
-                String message;
-                message = "Book successfully removed from wishlist";
-                // Store message in session (so it persists after redirect)
-                session.setAttribute("wishlistMessage", message);
-                String redirect = "wishlist?userId==<%= userId%>";
+                System.out.println(removewishliststmt);
+                String redirect = "wishlist?userId=" + userId;
                 response.sendRedirect(redirect);
             } catch (Exception e) {
                 e.printStackTrace();

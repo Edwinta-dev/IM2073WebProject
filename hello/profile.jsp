@@ -29,13 +29,13 @@
       <div class="collapse navbar-collapse" id="navbarSupportedContent">
         <ul class="navbar-nav me-auto mb-2 mb-lg-0">
           <li class="nav-item">
-            <a class="nav-link active" aria-current="page" href="home.jsp">Home</a>
+            <a class="nav-link active" aria-current="page" href="index.jsp">Home</a>
           </li>
           <li class="nav-item">
             <a class="nav-link" href="profile?userId=<%= userId%>">Profile</a>
           </li>
           <li class="nav-item">
-            <a class="nav-link" href="cart?userId==<%= userId%>">Cart</a>
+            <a class="nav-link" href="cart?userId=<%= userId%>">Cart</a>
           </li>
         </li>
         <li class="nav-item">
@@ -43,15 +43,6 @@
         </li>
           </li>
         </ul>
-        <form class="d-flex" role="search">
-          <input
-            class="form-control me-2"
-            type="search"
-            placeholder="Search"
-            aria-label="Search"
-          />
-          <button class="btn btn-outline-success" type="submit">Search</button>
-        </form>
       </div>
     </div>
   </nav>
@@ -73,28 +64,25 @@
   <br />
   <div>
     <h6><strong>Email: </strong><%=request.getAttribute("email")%></h6>
-    <br />
-    <p style="display: inline">Wrong email? Change it</p>
-    <a href="detailChange.jsp">here!</a>
-  </div>
-  <br />
+    <p style="display: inline">Wrong email? <a href="changedetail.jsp?action=email">Change it here</a></p>
+  <br/>
+  <br/>
+  
   <div>
     <h6 style="display: inline"><strong>Change your password </strong></h6>
-    <a href="passwordChange.jsp">here!</a>
+    <a href="changedetail.jsp?action=password_hash">here!</a>
   </div>
   <br />
   <div>
     <h6><Strong>Phone: </Strong><%=request.getAttribute("phone")%></h6>
-    <br />
-    <h6 style="display: inline">Change your Phone number</h6>
-    <a href="detailChange.jsp">here!</a>
+    <p style="display: inline">Change your Phone number</p>
+    <a href="changedetail.jsp?action=phone">here!</a>
   </div>
   <br />
   <div>
     <h6><Strong>Address: </Strong><%=request.getAttribute("address")%></h6>
-    <br />
-    <h6 style="display: inline">Change your Address</h6>
-    <a href="detailChange.jsp">here!</a>
+    <p style="display: inline">Change your Address</p>
+    <a href="changedetail.jsp?action=address">here!</a>
   </div>
   <br />
 </body>
